@@ -5,16 +5,11 @@ import pandas as pd
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
 
 application = Flask(__name__)
-app = application
 
-
-# ---------------- HOME ROUTE ----------------
 @app.route('/')
 def index():
     return render_template('index.html')
 
-
-# ---------------- PREDICTION ROUTE ----------------
 @app.route('/predictdata', methods=['GET', 'POST'])
 def predict_datapoint():
     if request.method == 'GET':
@@ -27,7 +22,7 @@ def predict_datapoint():
             lunch=request.form.get('lunch'),
             test_preparation_course=request.form.get('test_preparation_course'),
             reading_score=float(request.form.get('reading_score')),
-            writing_score=float(request.form.get('writing_score'))
+            writing_score=float(request.form.get('writing_score')),
         )
 
         pred_df = data.get_data_as_frame()
@@ -38,6 +33,5 @@ def predict_datapoint():
         return render_template('home.html', results=results[0])
 
 
-# ---------------- RUN APP ----------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    application.run(host="0.0.0.0")
