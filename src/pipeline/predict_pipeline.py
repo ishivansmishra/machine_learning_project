@@ -1,24 +1,35 @@
 import sys
+from pathlib import Path
 import pandas as pd
 from src.exception import CustomException
 from src.utils import load_object
+
+# Resolve project root reliably regardless of the process working directory.
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
 
 class PredictPipeline:
     def __init__(self):
         pass
 
     def predict(self,features):
-          try:
-           model_path = 'artifacts/model.pkl'
-           preprocessor_path = 'artifacts/preprocessor.pkl'
-           model=load_object(file_path=model_path)
-           preprocessor=load_object(file_path=preprocessor_path)
-           data_scaled = preprocessor.transform(features)
-           preds = model.predict(data_scaled)
-           return preds
-          
-          except Exception as e:
-                raise CustomException(e,sys)
+            try:
+                  model_path = ARTIFACTS_DIR / "model.pkl"
+                  preprocessor_path = ARTIFACTS_DIR / "preprocessor.pkl"
+
+                  if not model_path.exists() or not preprocessor_path.exists():
+                        raise FileNotFoundError(
+                              f"Model artifacts not found. Expected files at: {model_path} and {preprocessor_path}"
+                        )
+
+                  model = load_object(file_path=str(model_path))
+                  preprocessor = load_object(file_path=str(preprocessor_path))
+                  data_scaled = preprocessor.transform(features)
+                  preds = model.predict(data_scaled)
+                  return preds
+
+            except Exception as e:
+                  raise CustomException(e,sys)
 
 
 class CustomData:
