@@ -123,8 +123,15 @@
 
         </form>
 
+        <!-- Error -->
+        {% if error_message %}
+        <div class="alert alert-danger mt-3" role="alert">
+            {{ error_message }}
+        </div>
+        {% endif %}
+
         <!-- Result -->
-        {% if results %}
+        {% if results is not none %}
         <div class="result-box">
             <h5>Predicted Maths Score:</h5>
             <h3 class="text-success">{{ results }}</h3>

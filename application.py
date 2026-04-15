@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
+from src.logger import logging
 
 application = Flask(__name__)
 
@@ -14,7 +15,8 @@ def index():
 def predict_datapoint():
     if request.method == 'GET':
         return render_template('home.html')
-    else:
+
+    try:
         data = CustomData(
             gender=request.form.get('gender'),
             race_ethnicity=request.form.get('ethnicity'),
@@ -26,11 +28,17 @@ def predict_datapoint():
         )
 
         pred_df = data.get_data_as_frame()
-
         predict_pipeline = PredictPipeline()
         results = predict_pipeline.predict(pred_df)
 
         return render_template('home.html', results=results[0])
+
+    except Exception as e:
+        logging.exception("Prediction failed")
+        return render_template(
+            'home.html',
+            error_message="Prediction failed. Please check server logs for details."
+        )
 
 
 if __name__ == "__main__":
