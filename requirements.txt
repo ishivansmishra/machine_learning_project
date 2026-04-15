@@ -2,7 +2,6 @@ pandas
 numpy
 scikit-learn
 catboost
-xgboost
 dill
 flask
 gunicorn
