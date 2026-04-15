@@ -1,12 +1,8 @@
 pandas
 numpy
-seaborn
 scikit-learn
 catboost
 xgboost
 dill
-catboost
-xgboost
 flask
 gunicorn
-#-e .
